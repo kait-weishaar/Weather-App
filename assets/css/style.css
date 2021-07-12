@@ -1,5 +1,10 @@
-.navbar-h1 {
+.header {
+    background: linear-gradient(0.25turn, #0668e7, #1e1053);
+}
+
+.header h1 {
     font-size: 38px;
+    color:white;
 }
 
 .searchbar-header {
@@ -13,4 +18,8 @@
 
 .forecast {
     font-size: 18px;
+}
+
+.form-control {
+    color: white;
 }
