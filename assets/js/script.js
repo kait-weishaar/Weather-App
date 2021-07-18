@@ -11,34 +11,39 @@ const weathercontainerEl=document.getElementById("weather-container");
 const iconContainerEl=document.getElementById("icon-holder");
 const clearButtonEl= document.getElementById("clear-history");
 
+let savedList=[];
+
+//Define functions to get and display local storage when page loads
 let historyAdd = function(searchTerm) {
     historyEl = document.createElement("button");
     historyEl.textContent = searchTerm;
-    historyEl.classlist = "d-flex w-100 btn light";
+    historyEl.classlist = "btn btn-primary";
     historyEl.setAttribute("city-input", searchTerm)
-    historyEl.setAttribute("type", "submit");
-    historyContainerEl.prepend(historyEl);
+    historyEl.setAttribute("type", "button");
+    historyContainerEl.append(historyEl);
 }
 function getLocalStorage() {
     return JSON.parse(localStorage.getItem('cities')) || [];
 }
 const loadSearch = function() {
-    let savedItems = getLocalStorage();
+    //savedList =JSON.parse(localStorage.getItem("cities"));
     historyContainerEl.innerHTML="";
-    if (!savedItems) {
+    if (!savedList) {
         return
     } else {
-        for (i=0; i<savedItems.length; i++) {
-            historyAdd(savedItems[i].search);
+        for (i=0; i<savedList.length; i++) {
+            historyAdd(savedList[i]);
         }
     }
 }
 
+
+//hide weather container and display search history
 let initialPage = function() {
     weathercontainerEl.classList.add("invisible");
+    savedList = JSON.parse(localStorage.getItem("cities")) || [];
     loadSearch();
 }
-
 initialPage();
 
 //define empty array to fill with history
@@ -48,11 +53,19 @@ let cities = [];
 //let searchHistory = JSON.parse(localStorage.getItem("cities")) || [];
 
 const saveSearch = function(searchTerm) {
-    let savedList = JSON.parse(localStorage.getItem("cities"));
-    let newItem = {search: searchTerm};
-    savedList.unshift(newItem)
-    let filtered = Array.from(new Set(savedList));
-    localStorage.setItem('cities', JSON.stringify(filtered))
+    
+    let newItem =searchTerm;
+    console.log(newItem);
+    console.log(savedList);
+    
+    if (savedList.indexOf(newItem) == -1){
+        savedList.unshift(newItem)
+    } else{
+        return
+    };
+    console.log(savedList)
+    //let filtered = Array.from(new Set(savedList));
+    localStorage.setItem('cities', JSON.stringify(savedList))
     loadSearch();
 }
 
@@ -82,6 +95,7 @@ const fetchWeather= function(city) {
                 alert("Unable to locate city. Please enter a valid city name");
             } else{
                 displayCurrent(data, city);
+                saveSearch(city);
             }
                 
         });
@@ -133,7 +147,8 @@ const displayCurrent = function(weather, searchInput) {
     let long = weather.coord.lon;
     getUVIndex(lat,long);
     fetch5Day(lat,long);
-    saveSearch(searchInput);
+    
+    
 
 }
 
@@ -206,6 +221,8 @@ let historySearch = function(event) {
     let location = event.target.getAttribute("city-input")
     if (location) {
         fetchWeather(location);
+        
+        loadSearch();
         //fetch5Day(location);
     }
 }
@@ -217,6 +234,7 @@ let formHandlerFunction = function(event) {
     console.log(city)
     if(city){
         fetchWeather(city);
+        //saveSearch(city);
         //fetch5Day(city);
         cities.unshift({city});
         inputEl.value = "";
@@ -229,6 +247,7 @@ let formHandlerFunction = function(event) {
 
 let clearHistory = function() {
     localStorage.clear();
+    savedList = JSON.parse(localStorage.getItem("cities")) || [];
     loadSearch();
 }
 
