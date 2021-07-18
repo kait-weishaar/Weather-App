@@ -23,3 +23,15 @@
 .form-control {
     color: white;
 }
+
+ul {
+    list-style: none;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.invisible {
+    display:none;
+}

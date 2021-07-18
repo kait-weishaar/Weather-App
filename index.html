@@ -15,65 +15,51 @@
     </header>
     <main class="container">
         <div class="row">
-            <div class="col-4 bg-light" id="search-form">
-                <h3 class="searchbar-header my-1">Search for a City</h3>
-                <div class="input-group mb-3">
+            <div class="col-4 bg-light">
+                
+                    <h3 class="card-header my-1">Search for a City</h3>
+                <form class="input-group mb-3" id="search-form">
+                 
                     <input id="search-input" type="text" autofocus="true" class="form-control" placeholder="Enter location" aria-label="Enter location">
-                    <div class="input-group-append">
+                    
                         <button class="btn btn-primary" type="button" id="search-button">
                             <span class="fas fa-search"></span>
                         </button>
-                    </div>
-                </div>
+                   
+                </form>
+                
                 <button class="btn btn-primary mb-3" type="button" id="clear-history">Clear history</button>
-                <form id="history"></form>
+                <div id="history"></div>
             </div>
-            <div class="col-8">
-                <div class="row mr-0">
-                    <div class="col-12 border border-dark m-3 rounded">
-                        <div class="row">
-                            <div class="col-12">
-                                <span id="city-name" class="city align-middle"></span>
-                                <img id="current-pic" alt="">
-                            </div>
+            <div class="col-8 full-height" id="weather-container">
+                        <div class="card-header" id="current-header">
+                            <div id="city-name"><span id="icon-holder"></span></div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <p id="temperature"></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <p id="humidity"></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <p id="wind-speed"></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 d-flex">
-                                <p id="UV-index"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <ul class="list-group list-group-flush">
+                                <li id="temperature"></li>
+                                <li id="humidity"></li>
+                                <li id="wind-speed"></li>
+                                <li id="UV-index"></li>
+                        </ul>
+                           
+                
                 <div class="row">
                     <div class="col-12">
                         <h3>5-Day Forecast</h3>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col card forecast bg-primary text-white ml-3 mb-3 rounded"></div>
-                    <div class="col card forecast bg-primary text-white ml-3 mb-3 rounded"></div>
-                    <div class="col card forecast bg-primary text-white ml-3 mb-3 rounded"></div>
-                    <div class="col card forecast bg-primary text-white ml-3 mb-3 rounded"></div>
-                    <div class="col card forecast bg-primary text-white ml-3 mb-3 rounded"></div>
+                    <div id="day-1" class="col card forecast bg-primary bg-gradient text-white ml-3 mb-3 rounded"></div>
+                    <div id="day-2" class="col card forecast bg-primary bg-gradient text-white ml-3 mb-3 rounded"></div>
+                    <div id="day-3" class="col card forecast bg-primary bg-gradient text-white ml-3 mb-3 rounded"></div>
+                    <div id="day-4" class="col card forecast bg-primary bg-gradient text-white ml-3 mb-3 rounded"></div>
+                    <div id="day-5" class="col card forecast bg-primary bg-gradient text-white ml-3 mb-3 rounded"></div>
                 </div>
             </div>
         </div>
+    </div>
     </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
     <script src="./assets/js/script.js"></script>
 </body>
