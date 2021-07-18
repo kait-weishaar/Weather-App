@@ -20,7 +20,7 @@ let historyAdd = function(searchTerm) {
     historyContainerEl.prepend(historyEl);
 }
 function getLocalStorage() {
-    return JSON.parse(localStorage.getItem('eventArray')) || [];
+    return JSON.parse(localStorage.getItem('cities')) || [];
 }
 const loadSearch = function() {
     let savedItems = getLocalStorage();
@@ -48,8 +48,9 @@ let cities = [];
 //let searchHistory = JSON.parse(localStorage.getItem("cities")) || [];
 
 const saveSearch = function(searchTerm) {
-    let savedList = getLocalStorage();
-    savedList.unshift({search: searchTerm});
+    let savedList = JSON.parse(localStorage.getItem("cities"));
+    let newItem = {search: searchTerm};
+    savedList.unshift(newItem)
     let filtered = Array.from(new Set(savedList));
     localStorage.setItem('cities', JSON.stringify(filtered))
     loadSearch();
@@ -84,7 +85,10 @@ const fetchWeather= function(city) {
             }
                 
         });
-    }})
+    }  else {
+        alert("Unable to locate city. Please enter a valid city name");
+    }
+});
     // .catch(function(error) {
         
     //     alert("Unable to perform search. Please check your wifi");
@@ -216,7 +220,7 @@ let formHandlerFunction = function(event) {
         //fetch5Day(city);
         cities.unshift({city});
         inputEl.value = "";
-        historyAdd(city);
+        //historyAdd(city);
     } else{
         alert("Please enter a City");
     }
