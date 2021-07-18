@@ -20,7 +20,7 @@ The responsive layout could use some improvement.
 * Bootstrp
 
 ## Website
-https://kait-weishaar.github.io/Challenge-4-Quiz
+https://kait-weishaar.github.io/Weather-App/
 
 ![Image of quiz](./assets/Capture.PNG)
 
