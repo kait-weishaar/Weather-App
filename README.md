@@ -22,7 +22,7 @@ The responsive layout could use some improvement.
 ## Website
 https://kait-weishaar.github.io/Challenge-4-Quiz
 
-![Image of quiz](./assets/Capture.png)
+![Image of quiz](./assets/Capture.PNG)
 
 
 ## Contribution
