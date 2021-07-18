@@ -26,7 +26,6 @@ function getLocalStorage() {
     return JSON.parse(localStorage.getItem('cities')) || [];
 }
 const loadSearch = function() {
-    //savedList =JSON.parse(localStorage.getItem("cities"));
     historyContainerEl.innerHTML="";
     if (!savedList) {
         return
@@ -49,8 +48,7 @@ initialPage();
 //define empty array to fill with history
 let cities = [];
 
-//Get any existing search history out of local storage to display to page
-//let searchHistory = JSON.parse(localStorage.getItem("cities")) || [];
+
 
 const saveSearch = function(searchTerm) {
     
@@ -69,10 +67,6 @@ const saveSearch = function(searchTerm) {
     loadSearch();
 }
 
-
-// let saveHistory = function(){
-//     localStorage.setItem("cities", JSON.stringify(cities));
-// };
 
 let cityID="";
 let lat="";
@@ -127,13 +121,15 @@ const displayCurrent = function(weather, searchInput) {
     weathercontainerEl.classList.remove("invisible")
     //display current date and location
    
-            nameEl.textContent = weather.name + " (" + moment(weather.dt.value).format("MMM D, YYYY") + ") ";
+    nameEl.textContent = weather.name + " (" + moment(weather.dt.value).format("MMM D, YYYY") + ") ";
 
 
     let currentIcon = document.createElement("img")
             currentIcon.setAttribute("src", `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`);
             iconContainerEl.appendChild(currentIcon);
             currentIcon.setAttribute("alt", weather.weather[0].description);
+
+
     //set content for current weather
     currentTempEl.textContent = "Temperature: " + weather.main.temp + " °F";
     currentHumidityEl.textContent = "Humidity: " + weather.main.humidity + " %";
@@ -147,8 +143,6 @@ const displayCurrent = function(weather, searchInput) {
     let long = weather.coord.lon;
     getUVIndex(lat,long);
     fetch5Day(lat,long);
-    
-    
 
 }
 
@@ -168,7 +162,7 @@ let displayUV = function(data) {
     };
 
     currentUVEl.appendChild(UVindex);
-    //currentUVEl.classList = "list-group-item"
+    
 }
 
 const fetch5Day = function(lat,long) {
@@ -223,7 +217,7 @@ let historySearch = function(event) {
         fetchWeather(location);
         
         loadSearch();
-        //fetch5Day(location);
+        
     }
 }
 
@@ -234,11 +228,8 @@ let formHandlerFunction = function(event) {
     console.log(city)
     if(city){
         fetchWeather(city);
-        //saveSearch(city);
-        //fetch5Day(city);
         cities.unshift({city});
         inputEl.value = "";
-        //historyAdd(city);
     } else{
         alert("Please enter a City");
     }
