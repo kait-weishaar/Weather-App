@@ -1,21 +1,42 @@
    //Link to all html elements first
 const inputEl = document.getElementById("search-input");
-//const searchEl = document.getElementById("search-button");
 const formEl = document.getElementById("search-form");
 const nameEl = document.getElementById("city-name");
-const currentHeaderEl = document.getElementById("current-header");
 const currentTempEl = document.getElementById("temperature");
 const currentHumidityEl = document.getElementById("humidity");
 const currentWindEl = document.getElementById("wind-speed");
 const currentUVEl = document.getElementById("UV-index");
 const historyContainerEl = document.getElementById("history");
-const weathercontainerEl=document.getElementById("weather-container")
-const iconContainerEl=document.getElementById("icon-holder")
+const weathercontainerEl=document.getElementById("weather-container");
+const iconContainerEl=document.getElementById("icon-holder");
+const clearButtonEl= document.getElementById("clear-history");
 
-
+let historyAdd = function(searchTerm) {
+    historyEl = document.createElement("button");
+    historyEl.textContent = searchTerm;
+    historyEl.classlist = "d-flex w-100 btn light";
+    historyEl.setAttribute("city-input", searchTerm)
+    historyEl.setAttribute("type", "submit");
+    historyContainerEl.prepend(historyEl);
+}
+function getLocalStorage() {
+    return JSON.parse(localStorage.getItem('eventArray')) || [];
+}
+const loadSearch = function() {
+    let savedItems = getLocalStorage();
+    historyContainerEl.innerHTML="";
+    if (!savedItems) {
+        return
+    } else {
+        for (i=0; i<savedItems.length; i++) {
+            historyAdd(savedItems[i].search);
+        }
+    }
+}
 
 let initialPage = function() {
-    weathercontainerEl.classList.add("invisible")
+    weathercontainerEl.classList.add("invisible");
+    loadSearch();
 }
 
 initialPage();
@@ -24,13 +45,20 @@ initialPage();
 let cities = [];
 
 //Get any existing search history out of local storage to display to page
-let searchHistory = JSON.parse(localStorage.getItem("search")) || [];
+//let searchHistory = JSON.parse(localStorage.getItem("cities")) || [];
+
+const saveSearch = function(searchTerm) {
+    let savedList = getLocalStorage();
+    savedList.unshift({search: searchTerm});
+    let filtered = Array.from(new Set(savedList));
+    localStorage.setItem('cities', JSON.stringify(filtered))
+    loadSearch();
+}
 
 
-
-let saveHistory = function(){
-    localStorage.setItem("cities", JSON.stringify(cities));
-};
+// let saveHistory = function(){
+//     localStorage.setItem("cities", JSON.stringify(cities));
+// };
 
 let cityID="";
 let lat="";
@@ -101,6 +129,7 @@ const displayCurrent = function(weather, searchInput) {
     let long = weather.coord.lon;
     getUVIndex(lat,long);
     fetch5Day(lat,long);
+    saveSearch(searchInput);
 
 }
 
@@ -143,6 +172,7 @@ const display5Day = function (weather) {
         let forecast = weather.daily;
         let eachDay = forecast[i];
         let dayCard = document.getElementById("day-"+ i);
+        dayCard.innerHTML="";
         let forecastDate = document.createElement("h5")
         forecastDate.textContent = moment.unix(eachDay.dt).format("MM/DD/YYYY");
         dayCard.appendChild(forecastDate);
@@ -155,25 +185,18 @@ const display5Day = function (weather) {
 
         //display temp
         let forecastTemp = document.createElement("p");
-        forecastTemp.classList = "card-body text-center"
-        forecastTemp.textContent = "Temp: " + eachDay.temp.max + " °F";
+        forecastTemp.classList = "card-text text-center"
+        forecastTemp.textContent =eachDay.temp.max + " °F";
         dayCard.appendChild(forecastTemp);
 
         let forecastHum = document.createElement("p");
-        forecastHum.classList = "card-body text-center fs-6";
+        forecastHum.classList = "card-text text-center fs-6";
         forecastHum.textContent = "Hum: " + eachDay.humidity + " %"
         dayCard.appendChild(forecastHum);
     }
 }
 ;
-let historyItem = function(searchTerm) {
-    historyEl = document.createElement("button");
-    historyEl.textContent = searchTerm;
-    historyEl.classlist = "d-flex w-auto btn light";
-    historyEl.setAttribute("city-input", searchTerm)
-    historyEl.setAttribute("type", "submit");
-    historyContainerEl.prepend(historyEl);
-}
+
 
 let historySearch = function(event) {
     let location = event.target.getAttribute("city-input")
@@ -193,14 +216,20 @@ let formHandlerFunction = function(event) {
         //fetch5Day(city);
         cities.unshift({city});
         inputEl.value = "";
-        saveHistory();
-        historyItem(city);
+        historyAdd(city);
     } else{
         alert("Please enter a City");
     }
 }
 
-formEl.addEventListener("submit",formHandlerFunction) ;
 
+let clearHistory = function() {
+    localStorage.clear();
+    loadSearch();
+}
+
+
+formEl.addEventListener("submit",formHandlerFunction) ;
+clearButtonEl.addEventListener("click", clearHistory);
 
 historyContainerEl.addEventListener("click", historySearch);
